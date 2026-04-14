@@ -13,3 +13,7 @@ class EmployeeCreate(BaseModel):
 class EmployeeResponse(EmployeeCreate):
     id: int
     model_config = ConfigDict(from_attributes=True)
+
+
+class EmployeeUpdate(EmployeeCreate):
+    pass
