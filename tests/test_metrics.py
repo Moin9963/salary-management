@@ -17,6 +17,12 @@ def seed_metrics_data(client: TestClient) -> None:
             "country": "India",
             "salary": 150000,
         },
+        {
+            "full_name": "John Smith",
+            "job_title": "DevOps Engineer",
+            "country": "United States",
+            "salary": 120000,
+        },
     ]
 
     for employee in employees:
@@ -35,3 +41,11 @@ def test_country_salary_metrics_returns_200(client: TestClient) -> None:
         "max_salary": 150000.0,
         "avg_salary": 125000.0,
     }
+
+
+def test_job_title_salary_metrics_returns_200(client: TestClient) -> None:
+    seed_metrics_data(client)
+
+    response = client.get("/metrics/salary/job-title/Software Engineer")
+
+    assert response.status_code == 200
