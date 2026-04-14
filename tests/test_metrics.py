@@ -29,3 +29,9 @@ def test_country_salary_metrics_returns_200(client: TestClient) -> None:
     response = client.get("/metrics/salary/country/India")
 
     assert response.status_code == 200
+    assert response.json() == {
+        "country": "India",
+        "min_salary": 100000.0,
+        "max_salary": 150000.0,
+        "avg_salary": 125000.0,
+    }
