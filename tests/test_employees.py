@@ -79,12 +79,14 @@ def test_get_employee_by_id_returns_employee(client: TestClient) -> None:
     response = client.get(f"/employees/{create_response.json()['id']}")
 
     assert response.status_code == 200
+    assert response.json()["full_name"] == "Maria Garcia"
 
 
 def test_get_unknown_employee_returns_404(client: TestClient) -> None:
     response = client.get("/employees/999")
 
     assert response.status_code == 404
+    assert response.json() == {"detail": "Employee not found"}
 
 
 def test_update_employee_returns_200(client: TestClient) -> None:
