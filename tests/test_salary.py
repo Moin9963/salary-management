@@ -42,3 +42,5 @@ def test_salary_calculation_for_united_states(client: TestClient) -> None:
 
     assert response.status_code == 200
     assert response.json()["deduction_rate"] == 0.12
+    assert response.json()["deduction_amount"] == 14400.0
+    assert response.json()["net_salary"] == 105600.0
