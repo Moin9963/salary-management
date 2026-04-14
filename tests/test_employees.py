@@ -121,3 +121,17 @@ def test_deleted_employee_is_no_longer_retrievable(client: TestClient) -> None:
     response = client.get(f"/employees/{create_response.json()['id']}")
 
     assert response.status_code == 404
+
+
+def test_create_employee_with_invalid_salary_returns_422(client: TestClient) -> None:
+    response = client.post(
+        "/employees",
+        json={
+            "full_name": "Invalid Salary",
+            "job_title": "Engineer",
+            "country": "India",
+            "salary": 0,
+        },
+    )
+
+    assert response.status_code == 422
