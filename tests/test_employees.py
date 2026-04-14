@@ -62,3 +62,27 @@ def test_get_unknown_employee_returns_404(client: TestClient) -> None:
     response = client.get("/employees/999")
 
     assert response.status_code == 404
+
+
+def test_update_employee_returns_200(client: TestClient) -> None:
+    create_response = client.post(
+        "/employees",
+        json={
+            "full_name": "Maria Garcia",
+            "job_title": "QA Engineer",
+            "country": "Spain",
+            "salary": 80000,
+        },
+    )
+
+    response = client.put(
+        f"/employees/{create_response.json()['id']}",
+        json={
+            "full_name": "Maria Garcia",
+            "job_title": "Senior QA Engineer",
+            "country": "Spain",
+            "salary": 90000,
+        },
+    )
+
+    assert response.status_code == 200
