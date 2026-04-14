@@ -56,3 +56,9 @@ def test_get_employee_by_id_returns_employee(client: TestClient) -> None:
     response = client.get(f"/employees/{create_response.json()['id']}")
 
     assert response.status_code == 200
+
+
+def test_get_unknown_employee_returns_404(client: TestClient) -> None:
+    response = client.get("/employees/999")
+
+    assert response.status_code == 404
