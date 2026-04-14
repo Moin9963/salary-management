@@ -61,3 +61,12 @@ def test_salary_calculation_for_other_country_has_no_deduction(client: TestClien
 
     assert response.status_code == 200
     assert response.json()["deduction_rate"] == 0.0
+    assert response.json()["deduction_amount"] == 0.0
+    assert response.json()["net_salary"] == 80000.0
+
+
+def test_salary_calculation_for_unknown_employee_returns_404(client: TestClient) -> None:
+    response = client.get("/employees/999/salary")
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Employee not found"}
