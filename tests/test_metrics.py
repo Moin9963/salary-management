@@ -49,3 +49,7 @@ def test_job_title_salary_metrics_returns_200(client: TestClient) -> None:
     response = client.get("/metrics/salary/job-title/Software Engineer")
 
     assert response.status_code == 200
+    assert response.json() == {
+        "job_title": "Software Engineer",
+        "avg_salary": 125000.0,
+    }
