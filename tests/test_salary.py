@@ -17,3 +17,11 @@ def test_salary_calculation_for_india(client: TestClient) -> None:
     response = client.get(f"/employees/{create_response.json()['id']}/salary")
 
     assert response.status_code == 200
+    assert response.json() == {
+        "employee_id": 1,
+        "country": "India",
+        "gross_salary": 100000.0,
+        "deduction_rate": 0.1,
+        "deduction_amount": 10000.0,
+        "net_salary": 90000.0,
+    }
