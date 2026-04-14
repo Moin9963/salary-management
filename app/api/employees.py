@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.models import Employee
@@ -20,3 +21,9 @@ def create_employee(
     session.commit()
     session.refresh(employee)
     return employee
+
+
+@router.get("", response_model=list[EmployeeResponse])
+def list_employees(session: Session = Depends(get_db_session)) -> list[Employee]:
+    statement = select(Employee).order_by(Employee.id)
+    return list(session.scalars(statement).all())
