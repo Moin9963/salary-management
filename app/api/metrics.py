@@ -22,3 +22,14 @@ def country_salary_metrics(
     if metrics is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No employees found")
     return metrics
+
+
+@router.get("/job-title/{job_title}", response_model=JobTitleSalaryMetrics)
+def job_title_salary_metrics(
+    job_title: str,
+    session: Session = Depends(get_db_session),
+) -> JobTitleSalaryMetrics:
+    metrics = get_job_title_salary_metrics(session, job_title)
+    if metrics is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No employees found")
+    return metrics
