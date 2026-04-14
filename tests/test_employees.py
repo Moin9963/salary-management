@@ -88,3 +88,19 @@ def test_update_employee_returns_200(client: TestClient) -> None:
     assert response.status_code == 200
     assert response.json()["job_title"] == "Senior QA Engineer"
     assert response.json()["salary"] == 90000.0
+
+
+def test_delete_employee_returns_204(client: TestClient) -> None:
+    create_response = client.post(
+        "/employees",
+        json={
+            "full_name": "Lina Chen",
+            "job_title": "Data Analyst",
+            "country": "Singapore",
+            "salary": 95000,
+        },
+    )
+
+    response = client.delete(f"/employees/{create_response.json()['id']}")
+
+    assert response.status_code == 204
