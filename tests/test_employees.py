@@ -47,6 +47,22 @@ def test_list_employees_returns_created_records(client: TestClient) -> None:
     response = client.get("/employees")
 
     assert response.status_code == 200
+    assert response.json() == [
+        {
+            "id": 1,
+            "full_name": "Asha Patel",
+            "job_title": "Software Engineer",
+            "country": "India",
+            "salary": 100000.0,
+        },
+        {
+            "id": 2,
+            "full_name": "John Smith",
+            "job_title": "DevOps Engineer",
+            "country": "United States",
+            "salary": 120000.0,
+        },
+    ]
 
 
 def test_get_employee_by_id_returns_employee(client: TestClient) -> None:
