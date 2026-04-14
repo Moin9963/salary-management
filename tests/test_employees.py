@@ -104,3 +104,20 @@ def test_delete_employee_returns_204(client: TestClient) -> None:
     response = client.delete(f"/employees/{create_response.json()['id']}")
 
     assert response.status_code == 204
+
+
+def test_deleted_employee_is_no_longer_retrievable(client: TestClient) -> None:
+    create_response = client.post(
+        "/employees",
+        json={
+            "full_name": "Lina Chen",
+            "job_title": "Data Analyst",
+            "country": "Singapore",
+            "salary": 95000,
+        },
+    )
+
+    client.delete(f"/employees/{create_response.json()['id']}")
+    response = client.get(f"/employees/{create_response.json()['id']}")
+
+    assert response.status_code == 404
