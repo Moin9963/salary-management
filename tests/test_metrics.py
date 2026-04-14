@@ -53,3 +53,15 @@ def test_job_title_salary_metrics_returns_200(client: TestClient) -> None:
         "job_title": "Software Engineer",
         "avg_salary": 125000.0,
     }
+
+
+def test_country_salary_metrics_returns_404_when_no_employees_exist(client: TestClient) -> None:
+    response = client.get("/metrics/salary/country/Japan")
+
+    assert response.status_code == 404
+
+
+def test_job_title_salary_metrics_returns_404_when_no_employees_exist(client: TestClient) -> None:
+    response = client.get("/metrics/salary/job-title/SRE")
+
+    assert response.status_code == 404
