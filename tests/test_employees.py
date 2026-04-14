@@ -40,3 +40,19 @@ def test_list_employees_returns_created_records(client: TestClient) -> None:
     response = client.get("/employees")
 
     assert response.status_code == 200
+
+
+def test_get_employee_by_id_returns_employee(client: TestClient) -> None:
+    create_response = client.post(
+        "/employees",
+        json={
+            "full_name": "Maria Garcia",
+            "job_title": "QA Engineer",
+            "country": "Spain",
+            "salary": 80000,
+        },
+    )
+
+    response = client.get(f"/employees/{create_response.json()['id']}")
+
+    assert response.status_code == 200
