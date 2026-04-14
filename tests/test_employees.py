@@ -86,3 +86,5 @@ def test_update_employee_returns_200(client: TestClient) -> None:
     )
 
     assert response.status_code == 200
+    assert response.json()["job_title"] == "Senior QA Engineer"
+    assert response.json()["salary"] == 90000.0
