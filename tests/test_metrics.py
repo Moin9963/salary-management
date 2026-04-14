@@ -59,9 +59,11 @@ def test_country_salary_metrics_returns_404_when_no_employees_exist(client: Test
     response = client.get("/metrics/salary/country/Japan")
 
     assert response.status_code == 404
+    assert response.json() == {"detail": "No employees found"}
 
 
 def test_job_title_salary_metrics_returns_404_when_no_employees_exist(client: TestClient) -> None:
     response = client.get("/metrics/salary/job-title/SRE")
 
     assert response.status_code == 404
+    assert response.json() == {"detail": "No employees found"}
