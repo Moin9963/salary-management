@@ -25,3 +25,20 @@ def test_salary_calculation_for_india(client: TestClient) -> None:
         "deduction_amount": 10000.0,
         "net_salary": 90000.0,
     }
+
+
+def test_salary_calculation_for_united_states(client: TestClient) -> None:
+    create_response = client.post(
+        "/employees",
+        json={
+            "full_name": "John Smith",
+            "job_title": "DevOps Engineer",
+            "country": "United States",
+            "salary": 120000,
+        },
+    )
+
+    response = client.get(f"/employees/{create_response.json()['id']}/salary")
+
+    assert response.status_code == 200
+    assert response.json()["deduction_rate"] == 0.12
