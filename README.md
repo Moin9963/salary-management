@@ -1,34 +1,54 @@
-# Employee Salary API
+# employee-salary-api
 
-Production-ready assessment project for employee CRUD, salary calculation, and salary metrics endpoints.
+A small FastAPI service demonstrating employee CRUD operations, salary deduction calculation, and salary metrics endpoints backed by SQLite. The project is intentionally built with an incremental TDD workflow and a detailed commit history to show how the implementation evolved.
 
-## Status
+## Contents
 
-Implemented with a granular 46-commit history that shows the feature growth from scaffold to CRUD, salary calculation, salary metrics, and test coverage.
+- Description
+- Prerequisites
+- Usage
+- Environment configuration
+- Tests explanation
+- TDD flow
+- API docs
+- Docker
+- Project setup
 
-## Stack
+## Description
 
-- Python 3.11+
-- FastAPI
-- Pydantic
-- SQLAlchemy
-- SQLite
-- pytest
-- Ruff
+This project provides a minimal API for managing employees and calculating salary-related information. It includes:
 
-## Project Layout
+- REST endpoints implemented with FastAPI
+- SQLite persistence using SQLAlchemy
+- Request and response validation with Pydantic
+- Unit-style API tests using pytest
+- Salary deduction rules by country
+- Salary metrics endpoints for country and job title
+- Incremental commit history showing test-first development
 
-```text
-app/
-  api/
-  db/
-  schemas/
-  services/
-  main.py
-tests/
-```
+Implemented features:
 
-## Local Setup
+- Employee CRUD endpoints
+- Salary breakdown endpoint by employee ID
+- Salary metrics by country
+- Salary metrics by job title
+
+Salary rules:
+
+- India: 10% deduction
+- United States: 12% deduction
+- All other countries: no deduction
+
+## Prerequisites
+
+- Python 3.11 or later
+- `pip`
+- A terminal with access to the project folder
+- Docker Desktop, if you want to run the project in a container
+
+## Usage
+
+Install dependencies and run the app locally.
 
 ```bash
 python -m venv .venv
@@ -36,34 +56,122 @@ python -m venv .venv
 python -m pip install -e .[dev]
 ```
 
-## Running The App
+Start the application:
 
 ```bash
 python -m uvicorn app.main:app --reload
 ```
 
-## Running Tests
+By default, the API will be available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Environment Configuration
+
+The application uses SQLite by default and does not require a `.env` file for local execution.
+
+Default database:
+
+```text
+sqlite:///./employee_salary.db
+```
+
+If needed, you can override the database location with an environment variable:
+
+```bash
+set DATABASE_URL=sqlite:///./employee_salary.db
+```
+
+On PowerShell:
+
+```powershell
+$env:DATABASE_URL="sqlite:///./employee_salary.db"
+```
+
+## Tests Explanation
+
+The test suite focuses on endpoint behavior and business rules.
+
+Run all tests:
 
 ```bash
 python -m pytest
 ```
 
-## API Endpoints
+Run employee tests only:
 
-- `POST /employees`
-- `GET /employees`
-- `GET /employees/{employee_id}`
-- `PUT /employees/{employee_id}`
-- `DELETE /employees/{employee_id}`
-- `GET /employees/{employee_id}/salary`
-- `GET /metrics/salary/country/{country}`
-- `GET /metrics/salary/job-title/{job_title}`
+```bash
+python -m pytest tests/test_employees.py
+```
 
-## Salary Rules
+Run salary tests only:
 
-- India: 10% deduction
-- United States: 12% deduction
-- All other countries: no deduction
+```bash
+python -m pytest tests/test_salary.py
+```
+
+Run metrics tests only:
+
+```bash
+python -m pytest tests/test_metrics.py
+```
+
+The current test coverage includes:
+
+- Employee creation, listing, fetch, update, and delete
+- Validation failures for invalid employee input
+- Salary deduction calculation for India
+- Salary deduction calculation for United States
+- Salary fallback behavior for other countries
+- Salary metrics by country
+- Salary metrics by job title
+- Empty-result cases for metrics endpoints
+
+Tests use an isolated in-memory SQLite database so they remain fast and deterministic.
+
+## TDD Flow
+
+The project was developed using small test-first steps.
+
+Recommended workflow:
+
+1. Write a failing test for the next behavior.
+2. Run the relevant test and confirm it fails.
+3. Implement the smallest change needed to make it pass.
+4. Run the test again and confirm it passes.
+5. Refactor where needed while keeping the test suite green.
+6. Repeat for the next behavior.
+
+Examples from this project:
+
+- Add a failing employee creation test
+- Implement the employee creation endpoint
+- Add a failing employee list test
+- Implement the employee list endpoint
+- Add salary calculation tests for each rule
+- Implement the deduction logic
+- Add metrics tests
+- Implement aggregation endpoints
+
+## API Docs
+
+FastAPI provides interactive API documentation out of the box.
+
+Swagger UI:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+ReDoc:
+
+```text
+http://127.0.0.1:8000/redoc
+```
+
+These pages can be used to inspect request/response schemas and try endpoints from the browser.
 
 ## Docker
 
@@ -73,7 +181,7 @@ Build the image:
 docker build -t employee-salary-api .
 ```
 
-Run the API:
+Run the container:
 
 ```bash
 docker run --rm -p 8000:8000 employee-salary-api
@@ -85,24 +193,59 @@ If you want the SQLite database file to persist on your machine, mount the proje
 docker run --rm -p 8000:8000 -v ${PWD}:/app employee-salary-api
 ```
 
-## TDD Workflow
+## Project Setup
 
-The repository started with a scaffold commit and then a failing employee creation test. From there, the implementation was expanded in small commits that mostly follow a TDD shape:
+Install dependencies:
 
-- add or tighten tests for a behavior
-- implement the smallest change to satisfy the behavior
-- refactor or expand assertions once the behavior is stable
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -e .[dev]
+```
 
-Because the history was intentionally expanded to 46 commits, some later commits are coverage-tightening steps rather than strict red-first commits. That is acceptable as long as the overall history still clearly shows behavior-first development.
+Run the application:
 
-## Notes On Commit History
+```bash
+python -m uvicorn app.main:app --reload
+```
 
-- The first two commits were preserved as originally created.
-- CRUD, salary, and metrics behavior were then split into many smaller commits to make the evolution easy to inspect.
-- The current branch has 46 commits total.
+Run tests:
 
-## Implementation Details
+```bash
+python -m pytest
+```
 
-- AI was used to help scaffold project structure, draft test cases, refine commit sequencing, and improve documentation.
-- Generated code and commit slicing were reviewed manually and adjusted to match the problem statement.
-- The final application behavior was verified through the pytest suite.
+Run a specific test file:
+
+```bash
+python -m pytest tests/test_employees.py
+```
+
+## API Endpoints
+
+### Employee
+
+- `POST /employees`
+- `GET /employees`
+- `GET /employees/{employee_id}`
+- `PUT /employees/{employee_id}`
+- `DELETE /employees/{employee_id}`
+
+### Salary
+
+- `GET /employees/{employee_id}/salary`
+
+### Metrics
+
+- `GET /metrics/salary/country/{country}`
+- `GET /metrics/salary/job-title/{job_title}`
+
+## Implementation Notes
+
+A few practical decisions made in this project:
+
+- SQLite was chosen because it matches the assessment requirement and keeps setup lightweight.
+- SQLAlchemy is used for persistence and query handling.
+- FastAPI was chosen for clear request validation, simple routing, and built-in API documentation.
+- Tests are written against the API surface to validate request/response behavior end to end.
+- The commit history was intentionally kept granular to make the development flow easy to review.
