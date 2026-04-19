@@ -43,6 +43,20 @@ def test_country_salary_metrics_returns_200(client: TestClient) -> None:
     }
 
 
+def test_country_salary_metrics_matches_country_case_insensitively(client: TestClient) -> None:
+    seed_metrics_data(client)
+
+    response = client.get("/metrics/salary/country/india")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "country": "india",
+        "min_salary": 100000.0,
+        "max_salary": 150000.0,
+        "avg_salary": 125000.0,
+    }
+
+
 def test_job_title_salary_metrics_returns_200(client: TestClient) -> None:
     seed_metrics_data(client)
 
@@ -51,6 +65,18 @@ def test_job_title_salary_metrics_returns_200(client: TestClient) -> None:
     assert response.status_code == 200
     assert response.json() == {
         "job_title": "Software Engineer",
+        "avg_salary": 125000.0,
+    }
+
+
+def test_job_title_salary_metrics_matches_title_case_insensitively(client: TestClient) -> None:
+    seed_metrics_data(client)
+
+    response = client.get("/metrics/salary/job-title/software engineer")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "job_title": "software engineer",
         "avg_salary": 125000.0,
     }
 
