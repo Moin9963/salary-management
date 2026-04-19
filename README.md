@@ -30,9 +30,11 @@ This project provides a minimal API for managing employees and calculating salar
 Implemented features:
 
 - Employee CRUD endpoints
+- Employee list filtering by country and job title
 - Salary breakdown endpoint by employee ID
 - Salary metrics by country
 - Salary metrics by job title
+- Case-insensitive country and job-title matching for salary metrics
 
 Salary rules:
 
@@ -122,12 +124,14 @@ python -m pytest tests/test_metrics.py
 The current test coverage includes:
 
 - Employee creation, listing, fetch, update, and delete
+- Employee list filtering by country and job title
 - Validation failures for invalid employee input
 - Salary deduction calculation for India
 - Salary deduction calculation for United States
 - Salary fallback behavior for other countries
 - Salary metrics by country
 - Salary metrics by job title
+- Case-insensitive salary metrics lookup by country and job title
 - Empty-result cases for metrics endpoints
 
 Tests use an isolated in-memory SQLite database so they remain fast and deterministic.
@@ -155,6 +159,8 @@ Examples from this project:
 - Implement the deduction logic
 - Add metrics tests
 - Implement aggregation endpoints
+- Add filtering tests before implementing employee list filters
+- Add case-insensitive metrics tests before changing metrics queries
 
 ## API Docs
 
@@ -228,6 +234,9 @@ python -m pytest tests/test_employees.py
 
 - `POST /employees`
 - `GET /employees`
+- `GET /employees?country=India`
+- `GET /employees?job_title=Software Engineer`
+- `GET /employees?country=India&job_title=Software Engineer`
 - `GET /employees/{employee_id}`
 - `PUT /employees/{employee_id}`
 - `DELETE /employees/{employee_id}`
@@ -240,6 +249,8 @@ python -m pytest tests/test_employees.py
 
 - `GET /metrics/salary/country/{country}`
 - `GET /metrics/salary/job-title/{job_title}`
+
+Metrics lookups for country and job title are case-insensitive. For example, `India`, `india`, and `INDIA` match the same country value.
 
 ## Implementation Details
 
