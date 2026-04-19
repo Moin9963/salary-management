@@ -13,6 +13,7 @@ A small FastAPI service demonstrating employee CRUD operations, salary deduction
 - API docs
 - Docker
 - Project setup
+- Implementation details
 
 ## Description
 
@@ -240,9 +241,42 @@ python -m pytest tests/test_employees.py
 - `GET /metrics/salary/country/{country}`
 - `GET /metrics/salary/job-title/{job_title}`
 
-## Implementation Notes
+## Implementation Details
 
-A few practical decisions made in this project:
+This project was implemented with AI assistance as part of the assessment workflow. The AI assistance was used intentionally for speed, structure, and review, while the final code, test behavior, and trade-offs were verified manually.
+
+Tools used:
+
+- ChatGPT/Codex-style coding assistant
+- Local terminal commands for pytest, git history inspection, and project verification
+- FastAPI, SQLAlchemy, Pydantic, pytest, and Docker documentation patterns from standard project usage
+
+How AI was used:
+
+- To scaffold the initial FastAPI project structure, including `app`, `api`, `db`, `schemas`, `services`, and `tests` folders.
+- To draft focused pytest cases for employee CRUD, salary calculation rules, and salary metrics edge cases.
+- To draft and refine README sections, including setup, testing, Docker, and API usage instructions.
+
+Example prompts used during the workflow:
+
+- "Create a Python FastAPI project structure for an employee salary API using SQLite and pytest."
+- "Write failing pytest tests for employee creation, list, fetch, update, and delete endpoints."
+- "Add tests for salary calculation rules for India, United States, and all other countries."
+- "Rewrite the README in a clear interview-assessment style with setup, tests, TDD flow, and Docker instructions."
+
+Rationale for using AI:
+
+- To move quickly from the problem statement to a working project skeleton.
+- To generate multiple test scenarios faster while keeping them deterministic and readable.
+- To improve documentation clarity and ensure the README covers how to run, test, and inspect the project.
+
+Manual review and verification:
+
+- Tests were run locally with `python -m pytest`.
+- Endpoint behavior was validated through API-level pytest tests rather than only service-level tests.
+- The final implementation was checked against the original requirements: employee CRUD, SQLite persistence, salary calculation by country, salary metrics by country, and salary metrics by job title.
+
+Key implementation decisions:
 
 - SQLite was chosen because it matches the assessment requirement and keeps setup lightweight.
 - SQLAlchemy is used for persistence and query handling.
