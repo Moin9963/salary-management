@@ -24,8 +24,16 @@ def create_employee(
 
 
 @router.get("", response_model=list[EmployeeResponse])
-def list_employees(session: Session = Depends(get_db_session)) -> list[Employee]:
+def list_employees(
+    country: str | None = None,
+    job_title: str | None = None,
+    session: Session = Depends(get_db_session),
+) -> list[Employee]:
     statement = select(Employee).order_by(Employee.id)
+    if country is not None:
+        statement = statement.where(Employee.country == country)
+    if job_title is not None:
+        statement = statement.where(Employee.job_title == job_title)
     return list(session.scalars(statement).all())
 
 
