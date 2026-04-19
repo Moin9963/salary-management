@@ -8,11 +8,12 @@ from app.schemas.metrics import CountrySalaryMetrics, JobTitleSalaryMetrics
 
 
 def get_country_salary_metrics(session: Session, country: str) -> CountrySalaryMetrics | None:
+    normalized_country = country.strip().lower()
     statement = select(
         func.min(Employee.salary),
         func.max(Employee.salary),
         func.avg(Employee.salary),
-    ).where(Employee.country == country)
+    ).where(func.lower(Employee.country) == normalized_country)
     min_salary, max_salary, avg_salary = session.execute(statement).one()
 
     if min_salary is None or max_salary is None or avg_salary is None:
@@ -27,7 +28,10 @@ def get_country_salary_metrics(session: Session, country: str) -> CountrySalaryM
 
 
 def get_job_title_salary_metrics(session: Session, job_title: str) -> JobTitleSalaryMetrics | None:
-    statement = select(func.avg(Employee.salary)).where(Employee.job_title == job_title)
+    normalized_job_title = job_title.strip().lower()
+    statement = select(func.avg(Employee.salary)).where(
+        func.lower(Employee.job_title) == normalized_job_title
+    )
     avg_salary = session.execute(statement).scalar_one()
 
     if avg_salary is None:
