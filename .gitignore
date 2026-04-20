@@ -4,6 +4,7 @@ __pycache__/
 .coverage
 coverage.xml
 .venv/
+.env
 *.db
 *.sqlite
 *.sqlite3

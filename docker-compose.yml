@@ -1,0 +1,19 @@
+services:
+  api:
+    build:
+      context: .
+    image: employee-salary-api:local
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      APP_NAME: "${APP_NAME:-Employee Salary API}"
+      ENVIRONMENT: "${ENVIRONMENT:-development}"
+      DATABASE_URL: "${DATABASE_URL:-sqlite:////app/data/employee_salary.db}"
+      API_HOST: "0.0.0.0"
+      API_PORT: "8000"
+    volumes:
+      - employee-salary-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  employee-salary-data:
