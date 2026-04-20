@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-import os
 from collections.abc import Generator
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
+from app.core.config import get_settings
+
 
 def get_database_url() -> str:
-    return os.getenv("DATABASE_URL", "sqlite:///./employee_salary.db")
+    return get_settings().database_url
 
 
 class Base(DeclarativeBase):
