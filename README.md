@@ -12,6 +12,7 @@ A small FastAPI service demonstrating employee CRUD operations, salary deduction
 - TDD flow
 - API docs
 - Docker
+- Docker Compose
 - Project setup
 - Implementation details
 
@@ -73,7 +74,7 @@ http://127.0.0.1:8000
 
 ## Environment Configuration
 
-The application uses SQLite by default and does not require a `.env` file for local execution.
+The application uses SQLite by default and does not require a `.env` file for local execution. Runtime settings are read from environment variables through a small settings module, with safe local defaults.
 
 Default database:
 
@@ -92,6 +93,22 @@ On PowerShell:
 ```powershell
 $env:DATABASE_URL="sqlite:///./employee_salary.db"
 ```
+
+Available settings:
+
+- `APP_NAME`: application display name
+- `ENVIRONMENT`: runtime environment name, for example `development`, `test`, or `production`
+- `DATABASE_URL`: SQLAlchemy database URL
+- `API_HOST`: host used by container runtime defaults
+- `API_PORT`: port used by Docker Compose host mapping
+
+Create a local `.env` from the example if you want to customize these values:
+
+```bash
+copy .env.example .env
+```
+
+Do not commit `.env`; it is intentionally ignored by git.
 
 ## Tests Explanation
 
@@ -200,6 +217,34 @@ If you want the SQLite database file to persist on your machine, mount the proje
 docker run --rm -p 8000:8000 -v ${PWD}:/app employee-salary-api
 ```
 
+## Docker Compose
+
+Start the API with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+Run it in the background:
+
+```bash
+docker compose up --build -d
+```
+
+Stop the service:
+
+```bash
+docker compose down
+```
+
+The compose setup stores the SQLite database in a named volume mounted at `/app/data`, using this database URL by default:
+
+```text
+sqlite:////app/data/employee_salary.db
+```
+
+You can override settings by creating a `.env` file from `.env.example`.
+
 ## Project Setup
 
 Install dependencies:
@@ -292,5 +337,7 @@ Key implementation decisions:
 - SQLite was chosen because it matches the assessment requirement and keeps setup lightweight.
 - SQLAlchemy is used for persistence and query handling.
 - FastAPI was chosen for clear request validation, simple routing, and built-in API documentation.
+- Runtime configuration is environment-variable driven so local and container runs can use different database locations without code changes.
+- Docker Compose is included to make the API easy to run with a persistent SQLite volume.
 - Tests are written against the API surface to validate request/response behavior end to end.
 - The commit history was intentionally kept granular to make the development flow easy to review.
